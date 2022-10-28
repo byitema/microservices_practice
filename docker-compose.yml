@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  todo:
+    container_name: microservices-practice-todo-container
+    build: ./todo_list
+    image: microservices-practice-todo-image
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+  statistics:
+    container_name: microservices-practice-statistics-container
+    build: ./statistics
+    image: microservices-practice-statistics-image
+    ports:
+      - "8001:80"
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - todo
+  db:
+    container_name: microservices-practice-db-container
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
