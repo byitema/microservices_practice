@@ -23,6 +23,7 @@ class ToDoListTaskBase(BaseModel):
 class ToDoListTask(ToDoListTaskBase):
     id: int = Field(..., gt=0, example=1)
     done: bool = Field(False, description="task is done or not")
+    todo_list_id: int = Field(..., gt=0, example=1)
 
     class Config:
         orm_mode = True
