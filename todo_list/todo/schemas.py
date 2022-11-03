@@ -30,7 +30,7 @@ class ToDoListTask(ToDoListTaskBase):
 
 
 class ToDoListTaskCreate(ToDoListTaskBase):
-    todo_list_id: int = Field(..., gt=0, example=1)
+    pass  # todo_list_id: int = Field(..., gt=0, example=1)
 
 
 class ToDoListTaskUpdate(ToDoListTaskBase):

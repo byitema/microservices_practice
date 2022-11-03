@@ -45,9 +45,10 @@ def delete_todo_list(db: Session, todo_list: ToDoListModel) -> None:
     db.commit()
 
 
-def create_todo_list_task(db: Session, todo_list_task_create: ToDoListTaskCreate, user_id: int) -> ToDoListTaskModel:
+def create_todo_list_task(db: Session, todo_list_task_create: ToDoListTaskCreate, user_id: int, todo_list_id: int) -> ToDoListTaskModel:
     todo_list_task = ToDoListTaskModel(**todo_list_task_create.dict())
     todo_list_task.done = False
+    todo_list_task.todo_list_id = todo_list_id
 
     db.add(todo_list_task)
     db.commit()
@@ -62,8 +63,8 @@ def get_todo_list_task(db: Session, todo_list_task_id: int) -> Optional[ToDoList
     return result.scalar()
 
 
-def get_todo_list_tasks(db: Session, user_id: int) -> List[ToDoListTask]:
-    stmt = select(ToDoListTaskModel).where(ToDoListModel.owner_id == user_id)
+def get_todo_list_tasks(db: Session, user_id: int, todo_list_id: int) -> List[ToDoListTask]:
+    stmt = select(ToDoListTaskModel).join(ToDoListModel, ToDoListTaskModel.todo_list).where(ToDoListModel.owner_id == user_id).where(ToDoListModel.id == todo_list_id)
     result: Result = db.execute(stmt)
     return result.scalars().all()
 
